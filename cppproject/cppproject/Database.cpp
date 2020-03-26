@@ -33,5 +33,9 @@ public:
 	{
 		return false;
 	}
-
+protected:
+	sqlite3* getDbObject()
+	{
+		return db;
+	}
 };
