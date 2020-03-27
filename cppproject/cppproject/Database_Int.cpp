@@ -5,7 +5,7 @@ using namespace std;
 class Database_Int
 {
 private:
-	const string dbpath = "db.db3";
+	const string dbpath = "db/db.db3";
 	const string tablename = "db";
 public:
 	string getDBPath()

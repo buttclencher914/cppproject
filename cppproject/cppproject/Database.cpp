@@ -1,6 +1,5 @@
 #include "Database_Int.cpp"
 #include "sqlite3.h"
-#include <iostream>
 
 
 class Database : public Database_Int
@@ -8,10 +7,34 @@ class Database : public Database_Int
 private:
 	sqlite3* db;
 public:
-	bool Connect(string dbpath)
+	bool Connect(string dbpath) override
 	{
-		char* c = const_cast<char*>(dbpath.c_str());
+		const char* c = dbpath.c_str();
 		int rc = sqlite3_open(c, &db);
+		if (rc)
+		{
+			Disconnect();
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	bool Disconnect() override
+	{
+		sqlite3_close(db);
+		return true;
+	}
+	bool AddData(DataRow dr) override
+	{
+		sqlite3_stmt* stmt = 0;
+		
+		string statement = "INSERT INTO " + getTableName() + "(SOURCE, ARTICLE_ID, ARTICLE, CONTENT_ID, CONTENT) VALUES('" + dr.getSource()
+			+ "','" + dr.getArticleID() + "','" + dr.getArticle() + "','" + dr.getContentID() + "','" + dr.getContent() + "');";
+		//int rc = sqlite3_prepare_v2(db, statement.c_str(), -1, &stmt, 0);
+		int rc = sqlite3_exec(db, statement.c_str(), 0, 0, 0);
+		//rc = sqlite3_step(stmt);
 		if (rc)
 		{
 			return false;
@@ -21,17 +44,22 @@ public:
 			return true;
 		}
 	}
-	bool Disconnect()
+	bool RemoveData(long id) override
 	{
-		return false;
-	}
-	bool AddData(DataRow dr)
-	{
-		return false;
-	}
-	bool RemoveData(long id)
-	{
-		return false;
+		sqlite3_stmt* stmt = 0;
+
+		string statement = "DELETE FROM " + getTableName() + " WHERE ID = " + to_string(id) + ";";
+		//int rc = sqlite3_prepare_v2(db, statement.c_str(), -1, &stmt, 0);
+		int rc = sqlite3_exec(db, statement.c_str(), 0, 0, 0);
+		//rc = sqlite3_step(stmt);
+		if (rc)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 protected:
 	sqlite3* getDbObject()
