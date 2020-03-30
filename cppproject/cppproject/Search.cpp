@@ -54,4 +54,25 @@ public:
 		//sqlite3_close(db);
 		return 0;
 	}
+
+	bool CountData(string search)
+	{
+		int callback(void*, int, char**, char**);
+
+		sqlite3_stmt* stmt = 0;
+
+		string statement = "SELECT COUNT(ARTICLE) AS ResultsFound FROM " + tablename + " WHERE content like '%" + search + "%'";
+
+		int rc = sqlite3_exec(db, statement.c_str(), callback, 0, &ErrMsg);
+
+		//if (rc != SQLITE_OK) {
+		//	fprintf(stderr, "SQL error: %s\n", ErrMsg);
+		//	sqlite3_free(ErrMsg);
+		//}
+		//else {
+		//	fprintf(stdout, "Returned number of rows\n");
+		//}
+		//sqlite3_close(db);
+		return 0;
+	}
 };
