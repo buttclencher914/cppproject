@@ -46,7 +46,7 @@ int main() {
 	crawlerFile << "NoOfComments, URL, Upvotes,Title,Comments\n";
 
 	CURL* curl;
-	CURLcode res;
+	CURLcode res = CURLE_OK;
 	string result;
 	string searchTerm(searchTopic);
 
@@ -79,9 +79,10 @@ int main() {
 		Json::Value value;
 
 		JSONCPP_STRING errs;
-		Json::CharReaderBuilder readerBuilder;
-		std::unique_ptr<Json::CharReader> const reader(readerBuilder.newCharReader());
-		bool res = reader->parse(result.c_str(), result.c_str() + result.length(), &value, &errs);
+		Json::Reader reader;
+
+		std::string input = "{}";
+		bool res = reader.parse(result ,value);
 		if (res && errs.empty()) {
 			for (int i = 0; i < SIZE; i++) {
 				//get title and url
@@ -116,9 +117,10 @@ int main() {
 
 						// parse
 						JSONCPP_STRING errs;
-						Json::CharReaderBuilder readerBuilder;
-						std::unique_ptr<Json::CharReader> const reader(readerBuilder.newCharReader());
-						bool res = reader->parse(result.c_str(), result.c_str() + result.length(), &value, &errs);
+						Json::Reader reader;
+
+						std::string input = "{}";
+						bool res = reader.parse(result, value);
 						if (res && errs.empty()) {
 							for (int j = 0; j < POSTS; j++) {
 								//write to file
