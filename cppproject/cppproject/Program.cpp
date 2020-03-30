@@ -35,7 +35,6 @@ int main()
 int callback(void* NotUsed, int argc, char** argv,
 	char** azColName) {
 
-	int counter = 0;
 	NotUsed = 0;
 
 	for (int i = 0; i < argc; i++) {
