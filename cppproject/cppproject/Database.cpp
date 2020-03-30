@@ -61,7 +61,6 @@ public:
 			return true;
 		}
 	}
-protected:
 	sqlite3* getDbObject()
 	{
 		return db;
